@@ -3,14 +3,16 @@ elasticsearch:
   ports:
     - "9200:9200"
 logstash:
-  image: logstash:latest
-  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  image: logstash:latest 
   volumes:
     - ./logstash/config:/etc/logstash/conf.d
+    - /etc/pki/tls/certs:/logstash/certs
+    - /etc/pki/tls/private:/logstash/private
   ports:
     - "5000:5000"
   links:
     - elasticsearch
+  command: logstash -f /etc/logstash/conf.d/logstash.conf
 kibana:
   build: kibana/
   volumes:
